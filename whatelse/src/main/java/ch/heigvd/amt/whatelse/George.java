@@ -1,7 +1,10 @@
 package ch.heigvd.amt.whatelse;
 
 import ch.heigvd.amt.whatelse.api.ICoffee;
+import ch.heigvd.amt.whatelse.impl.Chillin;
 import ch.heigvd.amt.whatelse.impl.Yverdoto;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class George {
 
@@ -19,7 +22,17 @@ public class George {
    */
 
   public ICoffee pleasePrepareMeANice(String coffeeName) {
-    return new Yverdoto();
+    // return coffeeName == Chillin.TASTE ? new Chillin() : new Yverdoto(); // bad hack
+    // sensibilisation
+    String prefix = "ch.heigvd.amt.whatelse.impl.";
+    String className = prefix + coffeeName;
+    ICoffee c = null;
+    try {
+      c = (ICoffee) Class.forName(className).getConstructor().newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+    return c;
   }
 
 }
